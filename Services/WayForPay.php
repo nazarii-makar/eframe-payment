@@ -3,6 +3,7 @@
 namespace EFrame\Payment\Services;
 
 use EFrame\Payment\Contracts\Payment;
+use EFrame\Payment\Exceptions\InvalidArgumentException;
 
 class WayForPay extends Service
 {
@@ -92,6 +93,20 @@ class WayForPay extends Service
         $this->_prepare(self::MODE_REFUND, $fields);
 
         return $this->_query();
+    }
+
+    /**
+     * MODE_PURCHASE
+     *
+     * @param $fields
+     *
+     * @return mixed
+     */
+    public function purchase($fields)
+    {
+        $this->_prepare(self::MODE_PURCHASE, $fields);
+
+        return $this->_params;
     }
 
     /**

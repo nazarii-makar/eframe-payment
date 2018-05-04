@@ -9,18 +9,11 @@ use Illuminate\Support\ServiceProvider;
 class PaymentServiceProvider extends ServiceProvider
 {
     /**
-     * @var array
-     */
-    protected $aliases = [
-        'wayforpay' => WayForPay::class,
-    ];
-
-    /**
      * Register the application services
      */
     public function register()
     {
-        $this->registerAliases();
+        $this->registerServices();
         $this->registerPayment();
     }
 
@@ -29,19 +22,23 @@ class PaymentServiceProvider extends ServiceProvider
      */
     protected function registerPayment()
     {
-        $this->app->singleton('payment', function () {
-            return new Payment();
-        });
+        $this->app->singleton('payment', Payment::class);
     }
 
     /**
      * Register payment services
      */
-    protected function registerAliases()
+    protected function registerServices()
     {
-        foreach ($this->aliases as $alias => $service) {
-            $this->app->alias($alias, $service);
-        }
+        $this->registerWayForPay();
+    }
+
+    /**
+     * Register WayForPay service
+     */
+    protected function registerWayForPay()
+    {
+        $this->app->bind('wayforpay', WayForPay::class);
     }
 
     /**

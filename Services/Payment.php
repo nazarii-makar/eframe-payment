@@ -18,18 +18,11 @@ class Payment
     protected $service;
 
     /**
-     * @var Collection
-     */
-    protected $config;
-
-    /**
      * Payment constructor.
      */
     public function __construct()
     {
-        $this->config = collect(config('payment'));
-
-        $this->service = $this->buildService($service);
+        $this->service = $this->buildService($this->config('default'));
     }
 
     /**
@@ -47,12 +40,12 @@ class Payment
      */
     protected function buildService($service)
     {
-        throw_unless(
-            $this->config->has("services.{$service}"),
+        throw_if(
+            is_null($this->config("services.{$service}")),
             new Exception("Payment service as {$service} does not specified.")
         );
 
-        $service_config = collect($this->config->get("services.{$service}"));
+        $service_config = collect($this->config("services.{$service}"));
 
         /** @var PaymentContract $driver */
         $driver = app($service_config->get('driver'));
@@ -84,5 +77,20 @@ class Payment
     protected function resolve($name, $arguments)
     {
         return call_user_func_array([$this->service, $name], $arguments);
+    }
+
+    /**
+     * @param null $key
+     * @param null $default
+     *
+     * @return mixed
+     */
+    protected function config($key = null, $default = null)
+    {
+        if (is_null($key)) {
+            return config('payment');
+        }
+
+        return config("payment.{$key}", $default);
     }
 }
