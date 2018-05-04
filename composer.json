@@ -1,0 +1,22 @@
+{
+    "name": "eframe/payment",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nazarii Makar",
+            "email": "nazar.makar@magnise.com"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "EFrame\\Payment\\": ""
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
