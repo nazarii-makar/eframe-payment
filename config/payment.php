@@ -23,10 +23,14 @@ return [
         'wayforpay' => [
             'driver'  => 'wayforpay',
             'options' => [
-                'account'          => env('WAYFORPAY_MERCHANT_ACCOUNT'),
-                'password'         => env('WAYFORPAY_MERCHANT_PASSWORD'),
-                'regular_password' => env('WAYFORPAY_MERCHANT_REGULAR_PASSWORD'),
-                'domain_name'      => env('WAYFORPAY_MERCHANT_DOMAIN_NAME'),
+                'merchantAccount'               => env('WAYFORPAY_MERCHANT_ACCOUNT'),
+                'merchantPassword'              => env('WAYFORPAY_MERCHANT_PASSWORD'),
+                'merchantRegularPassword'       => env('WAYFORPAY_MERCHANT_REGULAR_PASSWORD'),
+                'merchantDomainName'            => env('WAYFORPAY_MERCHANT_DOMAIN_NAME'),
+                'merchantTransactionType'       => env('WAYFORPAY_MERCHANT_TRANSACTION_TYPE'),
+                'merchantTransactionSecureType' => env('WAYFORPAY_MERCHANT_TRANSACTION_SECURE_TYPE'),
+                'serviceUrl'                    => env('WAYFORPAY_SERVICE_URL'),
+                'charset'                       => env('WAYFORPAY_CHARSET'),
             ],
         ],
 

@@ -13,7 +13,6 @@ class WayForPay extends Gateway
 {
     const PURCHASE_URL     = 'https://secure.wayforpay.com/pay';
     const API_URL          = 'https://api.wayforpay.com/api';
-    const WIDGET_URL       = 'https://secure.wayforpay.com/server/pay-widget.js';
     const FIELDS_DELIMITER = ';';
     const API_VERSION      = 1;
     const DEFAULT_CHARSET  = 'utf8';
@@ -28,33 +27,20 @@ class WayForPay extends Gateway
     const MODE_P2_PHONE         = 'P2_PHONE';
     const MODE_TRANSACTION_LIST = 'TRANSACTION_LIST';
 
-    private $_merchant_account;
-    private $_merchant_password;
-    private $_action;
-    private $_params;
-    private $_charset;
-
-    /**
-     * Init
-     *
-     * @param        $merchant_account
-     * @param        $merchant_password
-     * @param string $charset
-     *
-     * @throws InvalidArgumentException
-     */
-    public function __construct($charset = self::DEFAULT_CHARSET)
-    {
-        $this->_charset = $charset;
-    }
+    private $merchant_account;
+    private $merchant_password;
+    private $action;
+    private $params;
+    private $charset;
 
     /**
      * Bootstraping WayForPay
      */
     public function boot()
     {
-        $this->_merchant_account  = $this->options->get('account');
-        $this->_merchant_password = $this->options->get('password');
+        $this->charset           = $this->options->get('charset', self::DEFAULT_CHARSET);
+        $this->merchant_account  = $this->options->get('merchantAccount');
+        $this->merchant_password = $this->options->get('merchantPassword');
     }
 
     /**
@@ -66,9 +52,9 @@ class WayForPay extends Gateway
      */
     public function settle($fields)
     {
-        $this->_prepare(self::MODE_SETTLE, $fields);
+        $this->prepare(self::MODE_SETTLE, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -80,9 +66,9 @@ class WayForPay extends Gateway
      */
     public function charge($fields)
     {
-        $this->_prepare(self::MODE_CHARGE, $fields);
+        $this->prepare(self::MODE_CHARGE, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -94,9 +80,9 @@ class WayForPay extends Gateway
      */
     public function refund($fields)
     {
-        $this->_prepare(self::MODE_REFUND, $fields);
+        $this->prepare(self::MODE_REFUND, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -108,9 +94,9 @@ class WayForPay extends Gateway
      */
     public function purchase($fields)
     {
-        $this->_prepare(self::MODE_PURCHASE, $fields);
+        $this->prepare(self::MODE_PURCHASE, $fields);
 
-        return $this->_params;
+        return $this->params;
     }
 
     /**
@@ -122,9 +108,9 @@ class WayForPay extends Gateway
      */
     public function checkStatus($fields)
     {
-        $this->_prepare(self::MODE_CHECK_STATUS, $fields);
+        $this->prepare(self::MODE_CHECK_STATUS, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -136,9 +122,9 @@ class WayForPay extends Gateway
      */
     public function account2card($fields)
     {
-        $this->_prepare(self::MODE_P2P_CREDIT, $fields);
+        $this->prepare(self::MODE_P2P_CREDIT, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -150,9 +136,9 @@ class WayForPay extends Gateway
      */
     public function createInvoice($fields)
     {
-        $this->_prepare(self::MODE_CREATE_INVOICE, $fields);
+        $this->prepare(self::MODE_CREATE_INVOICE, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -164,9 +150,9 @@ class WayForPay extends Gateway
      */
     public function account2phone($fields)
     {
-        $this->_prepare(self::MODE_P2_PHONE, $fields);
+        $this->prepare(self::MODE_P2_PHONE, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -178,9 +164,9 @@ class WayForPay extends Gateway
      */
     public function transactionList($fields)
     {
-        $this->_prepare(self::MODE_TRANSACTION_LIST, $fields);
+        $this->prepare(self::MODE_TRANSACTION_LIST, $fields);
 
-        return $this->_query();
+        return $this->query();
     }
 
     /**
@@ -193,9 +179,9 @@ class WayForPay extends Gateway
      */
     public function createSignature($action, $fields)
     {
-        $this->_prepare($action, $fields);
+        $this->prepare($action, $fields);
 
-        return $this->_buildSignature();
+        return $this->buildSignature();
     }
 
     /**
@@ -204,25 +190,24 @@ class WayForPay extends Gateway
      *
      * @throws InvalidArgumentException
      */
-    private function _prepare($action, array $params)
+    private function prepare($action, array $params)
     {
-        $this->_action = $action;
+        $this->action = $action;
 
         throw_if(
             empty($params),
             new InvalidArgumentException('Arguments must be not empty')
         );
 
-        $this->_params                      = $params;
-        $this->_params['transactionType']   = $this->_action;
-        $this->_params['merchantAccount']   = $this->_merchant_account;
-        $this->_params['merchantSignature'] = $this->_buildSignature();
+        $this->params                      = $params;
+        $this->params['transactionType']   = $this->action;
+        $this->params['merchantSignature'] = $this->buildSignature();
 
-        if (self::MODE_PURCHASE !== $this->_action) {
-            $this->_params['apiVersion'] = self::API_VERSION;
+        if (self::MODE_PURCHASE !== $this->action) {
+            $this->params['apiVersion'] = self::API_VERSION;
         }
 
-        $this->_checkFields();
+        $this->checkFields();
 
     }
 
@@ -234,18 +219,16 @@ class WayForPay extends Gateway
      * @return bool
      * @throws InvalidArgumentException
      */
-    private function _checkFields()
+    private function checkFields()
     {
-        $required = $this->_getRequiredFields();
+        $required = $this->getRequiredFields();
         $error    = [];
 
         foreach ($required as $item) {
-            if (array_key_exists($item, $this->_params)) {
-                if (empty($this->_params[$item])) {
-                    $error[] = $item;
-                }
-            } else {
+            if (empty($this->params[$item] ?? $this->options->get($item))) {
                 $error[] = $item;
+            } else {
+                $this->params[$item] = $this->params[$item] ?? $this->options->get($item);
             }
         }
 
@@ -265,28 +248,28 @@ class WayForPay extends Gateway
      * @return string
      * @throws InvalidArgumentException
      */
-    private function _buildSignature()
+    private function buildSignature()
     {
-        $signFields = $this->_getFieldsNameForSignature();
+        $signFields = $this->getFieldsNameForSignature();
         $data       = [];
         $error      = [];
 
         foreach ($signFields as $item) {
-            if (array_key_exists($item, $this->_params)) {
-                $value = $this->_params[$item];
-                if (is_array($value)) {
-                    $data[] = implode(self::FIELDS_DELIMITER, $value);
-                } else {
-                    $data[] = (string)$value;
-                }
-            } else {
+            if (is_null($this->params[$item] ?? $this->options->get($item))) {
                 $error[] = $item;
+                continue;
+            } else {
+                $this->params[$item] = $this->params[$item] ?? $this->options->get($item);
             }
+
+            $value = $this->params[$item];
+
+            $data[] = is_array($value) ? implode(self::FIELDS_DELIMITER, $value) : (string) $value;
         }
 
-        if ($this->_charset != self::DEFAULT_CHARSET) {
+        if (self::DEFAULT_CHARSET != $this->charset) {
             foreach ($data as $key => $value) {
-                $data[$key] = iconv($this->_charset, self::DEFAULT_CHARSET, $data[$key]);
+                $data[$key] = iconv($this->charset, self::DEFAULT_CHARSET, $data[$key]);
             }
         }
 
@@ -295,16 +278,16 @@ class WayForPay extends Gateway
             new InvalidArgumentException('Missed signature field(s): ' . implode(', ', $error) . '.')
         );
 
-        return hash_hmac('md5', implode(self::FIELDS_DELIMITER, $data), $this->_merchant_password);
+        return hash_hmac('md5', implode(self::FIELDS_DELIMITER, $data), $this->merchant_password);
     }
 
     /**
      * Request method
      * @return mixed
      */
-    private function _query()
+    private function query()
     {
-        $fields = json_encode($this->_params);
+        $fields = json_encode($this->params);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, self::API_URL);
@@ -326,7 +309,7 @@ class WayForPay extends Gateway
      * @return array
      * @throws InvalidArgumentException
      */
-    private function _getFieldsNameForSignature()
+    private function getFieldsNameForSignature()
     {
         $purchaseFieldsAlias = [
             'merchantAccount',
@@ -340,7 +323,7 @@ class WayForPay extends Gateway
             'productPrice',
         ];
 
-        switch ($this->_action) {
+        switch ($this->action) {
             case 'PURCHASE':
                 return $purchaseFieldsAlias;
                 break;
@@ -398,7 +381,7 @@ class WayForPay extends Gateway
                 ];
                 break;
             default:
-                throw new InvalidArgumentException('Unknown transaction type: ' . $this->_action);
+                throw new InvalidArgumentException('Unknown transaction type: ' . $this->action);
         }
     }
 
@@ -407,9 +390,9 @@ class WayForPay extends Gateway
      *
      * @return array
      */
-    private function _getRequiredFields()
+    private function getRequiredFields()
     {
-        switch ($this->_action) {
+        switch ($this->action) {
             case 'PURCHASE':
                 return [
                     'merchantAccount',
@@ -453,7 +436,7 @@ class WayForPay extends Gateway
                     'clientIpAddress',
                 ];
 
-                $additional = !empty($this->_params['recToken']) ?
+                $additional = !empty($this->params['recToken']) ?
                     ['recToken'] :
                     ['card', 'expMonth', 'expYear', 'cardCvv', 'cardHolder'];
 
