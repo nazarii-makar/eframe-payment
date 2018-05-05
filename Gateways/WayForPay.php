@@ -48,7 +48,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function settle($fields)
     {
@@ -62,7 +62,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function charge($fields)
     {
@@ -76,7 +76,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function refund($fields)
     {
@@ -104,7 +104,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function checkStatus($fields)
     {
@@ -118,7 +118,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function account2card($fields)
     {
@@ -132,7 +132,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function createInvoice($fields)
     {
@@ -146,7 +146,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function account2phone($fields)
     {
@@ -160,7 +160,7 @@ class WayForPay extends Gateway
      *
      * @param $fields
      *
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function transactionList($fields)
     {
@@ -264,7 +264,7 @@ class WayForPay extends Gateway
 
             $value = $this->params[$item];
 
-            $data[] = is_array($value) ? implode(self::FIELDS_DELIMITER, $value) : (string) $value;
+            $data[] = is_array($value) ? implode(self::FIELDS_DELIMITER, $value) : (string)$value;
         }
 
         if (self::DEFAULT_CHARSET != $this->charset) {
@@ -282,26 +282,24 @@ class WayForPay extends Gateway
     }
 
     /**
-     * Request method
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      */
     private function query()
     {
         $fields = json_encode($this->params);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::API_URL);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json;charset=utf-8']);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $response = curl_exec($ch);
-        curl_close($ch);
+        return $this->client->request(
+            'POST',
+            self::API_URL,
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json;charset=utf-8',
+                ],
 
-        return json_decode($response, true);
+                'body' => $fields,
+            ]
+        );
     }
-
 
     /**
      * Signature fields

@@ -63,7 +63,7 @@ class Payment
     {
         throw_unless(
             method_exists($this->gateway, $name),
-            BadMethodCallException::class
+            new BadMethodCallException(sprintf("Gateway '%s' not support '%s'", get_class($this->gateway), $name))
         );
 
         return call_user_func_array([$this->gateway, $name], $arguments);
