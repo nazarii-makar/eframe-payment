@@ -1,11 +1,15 @@
 <?php
 
-namespace EFrame\Payment\Services;
+namespace EFrame\Payment\Gateways;
 
 use EFrame\Payment\Contracts\Payment;
 use EFrame\Payment\Exceptions\InvalidArgumentException;
 
-class WayForPay extends Service
+/**
+ * Class WayForPay
+ * @package EFrame\Payment\Gateways
+ */
+class WayForPay extends Gateway
 {
     const PURCHASE_URL     = 'https://secure.wayforpay.com/pay';
     const API_URL          = 'https://api.wayforpay.com/api';
@@ -180,52 +184,6 @@ class WayForPay extends Service
     }
 
     /**
-     * MODE_PURCHASE
-     * Generate html form
-     *
-     * @param $fields
-     *
-     * @return string
-     */
-    public function buildForm($fields)
-    {
-        $this->_prepare(self::MODE_PURCHASE, $fields);
-
-        $form = sprintf('<form method="POST" action="%s" accept-charset="utf-8">', self::PURCHASE_URL);
-
-        foreach ($this->_params as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $field) {
-                    $form .= sprintf('<input type="hidden" name="%s" value="%s" />', $key .
-                        '[]', htmlspecialchars($field));
-                }
-            } else {
-                $form .= sprintf('<input type="hidden" name="%s" value="%s" />', $key, htmlspecialchars($value));
-            }
-        }
-
-        $form .= '<input type="submit" value="Submit purchase form"></form>';
-
-        return $form;
-    }
-
-    /**
-     * MODE_PURCHASE
-     * If GET redirect is used to redirect to purchase form, i.e.
-     * https://secure.wayforpay.com/pay/get?merchantAccount=test_merch_n1&merchantDomainName=domain.ua&merchantSignature=c6d08855677ec6beca68e292b2c3c6ae&orderReference=RG3656-1430373125&orderDate=1430373125&amount=0.16&currency=UAH&productName=Saturn%20BUE%201.2&productPrice=0.16&productCount=1&language=RU
-     *
-     * @param $fields
-     *
-     * @return string
-     */
-    public function generatePurchaseUrl($fields)
-    {
-        $this->_prepare(self::MODE_PURCHASE, $fields);
-
-        return self::PURCHASE_URL . '/get?' . http_build_query($this->_params);
-    }
-
-    /**
      * Return signature hash
      *
      * @param $action
@@ -250,16 +208,17 @@ class WayForPay extends Service
     {
         $this->_action = $action;
 
-        if (empty($params)) {
-            throw new InvalidArgumentException('Arguments must be not empty');
-        }
+        throw_if(
+            empty($params),
+            new InvalidArgumentException('Arguments must be not empty')
+        );
 
         $this->_params                      = $params;
         $this->_params['transactionType']   = $this->_action;
         $this->_params['merchantAccount']   = $this->_merchant_account;
         $this->_params['merchantSignature'] = $this->_buildSignature();
 
-        if ($this->_action !== self::MODE_PURCHASE) {
+        if (self::MODE_PURCHASE !== $this->_action) {
             $this->_params['apiVersion'] = self::API_VERSION;
         }
 
@@ -290,9 +249,10 @@ class WayForPay extends Service
             }
         }
 
-        if (!empty($error)) {
-            throw new InvalidArgumentException('Missed required field(s): ' . implode(', ', $error) . '.');
-        }
+        throw_unless(
+            empty($error),
+            new InvalidArgumentException('Missed required field(s): ' . implode(', ', $error) . '.')
+        );
 
         return true;
     }
@@ -330,9 +290,10 @@ class WayForPay extends Service
             }
         }
 
-        if (!empty($error)) {
-            throw new InvalidArgumentException('Missed signature field(s): ' . implode(', ', $error) . '.');
-        }
+        throw_unless(
+            empty($error),
+            new InvalidArgumentException('Missed signature field(s): ' . implode(', ', $error) . '.')
+        );
 
         return hash_hmac('md5', implode(self::FIELDS_DELIMITER, $data), $this->_merchant_password);
     }
@@ -556,40 +517,5 @@ class WayForPay extends Service
             default:
                 throw new InvalidArgumentException('Unknown transaction type');
         }
-    }
-
-    /**
-     * @param array $fields           Widget(https://wiki.wayforpay.com/pages/viewpage.action?pageId=852091)
-     * @param null  $callbackFunction JavaScript callback function called on widget response
-     *
-     * @return string
-     */
-    public function buildWidgetButton(array $fields, $callbackFunction = null)
-    {
-        $this->_prepare(self::MODE_PURCHASE, $fields);
-
-        $button =
-            '<script id="widget-wfp-script" language="javascript" type="text/javascript" src="' . self::WIDGET_URL . '"></script>
-        <script type="text/javascript">
-            var wayforpay = new Wayforpay();
-            var pay = function () {
-            wayforpay.run(' . json_encode($this->_params) . ');
-            }
-            window.addEventListener("message", ' . ($callbackFunction ? $callbackFunction : "receiveMessage") . ');
-            function receiveMessage(event)
-            {
-                if(
-                    event.data == "WfpWidgetEventClose" ||      //при закрытии виджета пользователем
-                    event.data == "WfpWidgetEventApproved" ||   //при успешном завершении операции
-                    event.data == "WfpWidgetEventDeclined" ||   //при неуспешном завершении
-                    event.data == "WfpWidgetEventPending")      // транзакция на обработке
-                {
-                    console.log(event.data);
-                }
-            }
-        </script>
-        <button type="button" onclick="pay();">Оплатить</button>';
-
-        return $button;
     }
 }

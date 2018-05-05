@@ -1,15 +1,15 @@
 <?php
 
-namespace EFrame\Payment\Services;
+namespace EFrame\Payment\Gateways;
 
 use Illuminate\Support\Collection;
-use EFrame\Payment\Contracts\Payment;
+use EFrame\Payment\Contracts\Gateway as GatewayContract;
 
 /**
  * Class Service
- * @package EFrame\Payment\Services
+ * @package EFrame\Payment\Gateways
  */
-abstract class Service implements Payment
+abstract class Gateway implements GatewayContract
 {
     /**
      * @var Collection

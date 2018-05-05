@@ -4,28 +4,30 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Payment Service Name
+    | Default Payment Gateway Name
     |--------------------------------------------------------------------------
     |
     */
 
-    'default' => env('PAYMENT_SERVICE', 'wayforpay'),
+    'default' => env('PAYMENT_GATEWAY', 'wayforpay'),
 
     /*
     |--------------------------------------------------------------------------
-    | Services
+    | Gateways
     |--------------------------------------------------------------------------
     |
     */
 
-    'services' => [
+    'gateways' => [
 
         'wayforpay' => [
-            'driver'           => 'wayforpay',
-            'account'          => env('WAYFORPAY_MERCHANT_ACCOUNT'),
-            'password'         => env('WAYFORPAY_MERCHANT_PASSWORD'),
-            'regular_password' => env('WAYFORPAY_MERCHANT_REGULAR_PASSWORD'),
-            'domain_name'      => env('WAYFORPAY_MERCHANT_DOMAIN_NAME'),
+            'driver'  => 'wayforpay',
+            'options' => [
+                'account'          => env('WAYFORPAY_MERCHANT_ACCOUNT'),
+                'password'         => env('WAYFORPAY_MERCHANT_PASSWORD'),
+                'regular_password' => env('WAYFORPAY_MERCHANT_REGULAR_PASSWORD'),
+                'domain_name'      => env('WAYFORPAY_MERCHANT_DOMAIN_NAME'),
+            ],
         ],
 
     ],

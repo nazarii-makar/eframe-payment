@@ -2,7 +2,7 @@
 
 namespace EFrame\Payment\Contracts;
 
-interface Payment
+interface Gateway
 {
 
 }
