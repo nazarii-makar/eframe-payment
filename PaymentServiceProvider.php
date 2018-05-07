@@ -5,6 +5,7 @@ namespace EFrame\Payment;
 use EFrame\Payment\Payment;
 use EFrame\Payment\Gateways\WayForPay;
 use Illuminate\Support\ServiceProvider;
+use EFrame\Payment\Console\OrderTableCommand;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -13,8 +14,17 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerCommands();
         $this->registerGateways();
         $this->registerPayment();
+    }
+
+    /**
+     * Register commands
+     */
+    protected function registerCommands()
+    {
+        $this->commands(OrderTableCommand::class);
     }
 
     /**
