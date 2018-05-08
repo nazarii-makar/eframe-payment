@@ -20,6 +20,7 @@ class Order extends Model
      */
     const STATUS_ACTIVE     = 1;
     const STATUS_PENDING    = 2;
+    const STATUS_EXPIRED    = 3;
     const STATUS_NOT_ACTIVE = 0;
 
     /**

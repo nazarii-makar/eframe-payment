@@ -6,9 +6,18 @@ use EFrame\Payment\Payment;
 use EFrame\Payment\Gateways\WayForPay;
 use Illuminate\Support\ServiceProvider;
 use EFrame\Payment\Console\OrderTableCommand;
+use EFrame\Payment\Console\Commands\ExpirationOrderCommand;
 
 class PaymentServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     */
+    protected $commands = [
+        OrderTableCommand::class,
+        ExpirationOrderCommand::class,
+    ];
+
     /**
      * Register the application services
      */
@@ -17,6 +26,7 @@ class PaymentServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerGateways();
         $this->registerPayment();
+        $this->registerCommands();
     }
 
     /**
@@ -24,7 +34,7 @@ class PaymentServiceProvider extends ServiceProvider
      */
     protected function registerCommands()
     {
-        $this->commands(OrderTableCommand::class);
+        $this->commands($this->commands);
     }
 
     /**
