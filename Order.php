@@ -20,7 +20,6 @@ class Order extends Model
      */
     const STATUS_ACTIVE     = 1;
     const STATUS_PENDING    = 2;
-    const STATUS_EXPIRED    = 3;
     const STATUS_NOT_ACTIVE = 0;
 
     /**
@@ -47,7 +46,7 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'expire_in'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @var array
@@ -61,7 +60,6 @@ class Order extends Model
         'delivery_id',
         'is_regular',
         'status',
-        'expire_in',
         'rec_token',
     ];
 

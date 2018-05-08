@@ -6,7 +6,6 @@ use EFrame\Payment\Payment;
 use EFrame\Payment\Gateways\WayForPay;
 use Illuminate\Support\ServiceProvider;
 use EFrame\Payment\Console\OrderTableCommand;
-use EFrame\Payment\Console\Commands\ExpirationOrderCommand;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -15,7 +14,6 @@ class PaymentServiceProvider extends ServiceProvider
      */
     protected $commands = [
         OrderTableCommand::class,
-        ExpirationOrderCommand::class,
     ];
 
     /**
