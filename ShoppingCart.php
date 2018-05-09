@@ -128,11 +128,24 @@ class ShoppingCart
 
         $order->save();
 
-        foreach ($order_products as $order_product) {
-            $order->products()->save($order_product);
-        }
+        $order->products()->saveMany($order_products);
+
+        $this->redemption($order);
+
+        $order->save();
 
         return $order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    protected function redemption(Order $order)
+    {
+        /** @var Couponable $coupon */
+        foreach ($this->coupons as $coupon) {
+            $coupon->redemption($order);
+        }
     }
 
     /**
