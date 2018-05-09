@@ -21,7 +21,13 @@
     },
     "suggest": {
         "eframe/support" : "Required to use currency exchange rates library",
-        "illuminate/database" : "Required to store orders"
+        "eframe/foundation": "Required to use Form Request",
+        "eframe/sanitize": "Required to use Sanitize for Form Request",
+        "illuminate/database" : "Required to store orders",
+        "illuminate/bus" : "Required to handle job",
+        "illuminate/queue" : "Required to handle job",
+        "illuminate/contracts" : "Required to handle job",
+        "nesbot/carbon" : "Required to use Carbon"
     },
     "minimum-stability": "dev"
 }
