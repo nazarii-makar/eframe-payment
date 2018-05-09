@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Business\Comment\Models\Comment;
 use Business\Business\Models\Business;
 use EFrame\Payment\Events\OrderPurchased;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class WayForPayProcessPurchase extends Job
 {
@@ -39,6 +40,11 @@ class WayForPayProcessPurchase extends Job
     {
         /** @var Order $order */
         $order = Order::findOrFail($this->request->get('orderReference'));
+
+        throw_if(
+            Order::STATUS_ACTIVE === $order->status && !$order->is_regular,
+            ConflictHttpException::class
+        );
 
         $order->activate();
 
