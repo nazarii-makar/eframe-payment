@@ -19,5 +19,9 @@
     "config": {
         "sort-packages": true
     },
+    "suggest": {
+        "eframe/support" : "Required to use currency exchange rates library",
+        "illuminate/database" : "Required to store orders"
+    },
     "minimum-stability": "dev"
 }

@@ -7,15 +7,15 @@ interface Productable
     /**
      * @return string
      */
-    public function productCurrency();
+    public function getCurrency();
 
     /**
      * @return float
      */
-    public function productPrice();
+    public function getPrice();
 
     /**
      * @return string
      */
-    public function productName();
+    public function getName();
 }

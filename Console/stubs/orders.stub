@@ -23,7 +23,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('delivery_id')->index();
             $table->boolean('is_regular')->index();
             $table->unsignedTinyInteger('status')->index();
-            $table->string('rec_token')->index();
+            $table->string('rec_token')->nullable()->index();
             $table->timestamps();
             $table->softDeletes();
         });

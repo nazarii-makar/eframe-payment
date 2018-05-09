@@ -12,7 +12,7 @@ class WayForPayConverter extends Collection implements Converter
     /**
      * @param Order $order
      *
-     * @return array
+     * @return Collection
      */
     public static function createFromOrder(Order $order)
     {

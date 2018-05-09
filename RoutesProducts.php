@@ -9,24 +9,48 @@ trait RoutesProducts
     /**
      * @return string
      */
-    public function productCurrency()
+    public function getCurrencyKey()
     {
-        return $this->currency;
+        return 'currency';
     }
 
     /**
      * @return float
      */
-    public function productPrice()
+    public function getPriceKey()
     {
-        return $this->price;
+        return 'price';
     }
 
     /**
      * @return string
      */
-    public function productName()
+    public function getNameKey()
     {
-        return $this->name;
+        return 'name';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->getAttribute($this->getCurrencyKey());
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->getAttribute($this->getPriceKey());
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getAttribute($this->getNameKey());
     }
 }
