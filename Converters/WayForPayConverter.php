@@ -2,9 +2,9 @@
 
 namespace EFrame\Payment\Converters;
 
-use EFrame\Payment\Order;
-use EFrame\Payment\OrderProduct;
+use EFrame\Payment\Models\Order;
 use Illuminate\Support\Collection;
+use EFrame\Payment\Models\OrderProduct;
 use EFrame\Payment\Contracts\Converter;
 
 class WayForPayConverter extends Collection implements Converter

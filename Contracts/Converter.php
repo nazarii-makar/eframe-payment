@@ -2,7 +2,7 @@
 
 namespace EFrame\Payment\Contracts;
 
-use EFrame\Payment\Order;
+use EFrame\Payment\Models\Order;
 
 interface Converter
 {

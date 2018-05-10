@@ -1,19 +1,21 @@
 <?php
 
-namespace EFrame\Payment;
+namespace EFrame\Payment\Models;
 
 use EFrame\Uuid\HasUuid;
 use EFrame\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use EFrame\Payment\Models\Constraints\OrderConstraint;
 
 /**
  * Class Order
- * @package EFrame\Payment
+ * @package EFrame\Payment\Models
  */
 class Order extends Model
 {
     use SoftDeletes,
-        HasUuid;
+        HasUuid,
+        OrderConstraint;
 
     /**
      * Status states

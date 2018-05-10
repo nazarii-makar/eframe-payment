@@ -2,6 +2,8 @@
 
 namespace EFrame\Payment;
 
+use EFrame\Payment\Models\OrderProduct;
+
 trait HasProducts
 {
     /**

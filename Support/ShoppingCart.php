@@ -1,8 +1,10 @@
 <?php
 
-namespace EFrame\Payment;
+namespace EFrame\Payment\Support;
 
+use EFrame\Payment\Models\Order;
 use Illuminate\Support\Collection;
+use EFrame\Payment\Models\OrderProduct;
 use Illuminate\Database\Eloquent\Model;
 use EFrame\Payment\Contracts\Couponable;
 use EFrame\Payment\Contracts\Productable;

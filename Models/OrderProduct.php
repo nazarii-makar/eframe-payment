@@ -1,18 +1,20 @@
 <?php
 
-namespace EFrame\Payment;
+namespace EFrame\Payment\Models;
 
 use EFrame\Uuid\HasUuid;
 use EFrame\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use EFrame\Payment\Models\Constraints\OrderProductConstraint;
 
 /**
  * Class OrderProduct
- * @package EFrame\Payment
+ * @package EFrame\Payment\Models
  */
 class OrderProduct extends Model
 {
-    use HasUuid;
+    use HasUuid,
+        OrderProductConstraint;
 
     /**
      * The table associated with the model.

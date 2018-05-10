@@ -2,7 +2,7 @@
 
 namespace EFrame\Payment\Events;
 
-use EFrame\Payment\Order;
+use EFrame\Payment\Models\Order;
 
 /**
  * Class OrderPurchased

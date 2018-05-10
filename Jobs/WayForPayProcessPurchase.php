@@ -3,8 +3,8 @@
 namespace EFrame\Payment\Jobs;
 
 use Carbon\Carbon;
-use EFrame\Payment\Order;
 use Illuminate\Http\Request;
+use EFrame\Payment\Models\Order;
 use Illuminate\Support\Collection;
 use Business\Comment\Models\Comment;
 use Business\Business\Models\Business;

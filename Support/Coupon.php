@@ -1,7 +1,8 @@
 <?php
 
-namespace EFrame\Payment;
+namespace EFrame\Payment\Support;
 
+use EFrame\Payment\Models\Order;
 use EFrame\Payment\Contracts\Couponable;
 
 abstract class Coupon implements Couponable

@@ -4,7 +4,7 @@ namespace EFrame\Payment\Gateways;
 
 use EFrame\Payment\Contracts\Payment;
 use EFrame\Payment\Exceptions\InvalidArgumentException;
-use EFrame\Payment\OrderProduct;
+use EFrame\Payment\Models\OrderProduct;
 
 /**
  * Class WayForPay

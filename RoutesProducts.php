@@ -2,8 +2,6 @@
 
 namespace EFrame\Payment;
 
-use EFrame\Payment\Exceptions\InvalidArgumentException;
-
 trait RoutesProducts
 {
     /**
