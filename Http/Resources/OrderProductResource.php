@@ -2,13 +2,13 @@
 
 namespace EFrame\Payment\Http\Resources;
 
-use EFrame\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\Resource;
 
 /**
  * Class OrderProductResource
  * @package EFrame\Payment\Http\Resources
  */
-class OrderProductResource extends ResourceCollection
+class OrderProductResource extends Resource
 {
     /**
      * Transform the resource into an array.
