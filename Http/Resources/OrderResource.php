@@ -3,6 +3,7 @@
 namespace EFrame\Payment\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
+use EFrame\Payment\Http\Resources\OrderProductResource;
 
 /**
  * Class OrderResource
@@ -32,6 +33,9 @@ class OrderResource extends Resource
             'created_at'    => $this->created_at->toIso8601String(),
             'updated_at'    => optional($this->updated_at)->toIso8601String(),
             'deleted_at'    => optional($this->deleted_at)->toIso8601String(),
+            $this->mergeWhen($this->resource->relationLoaded('products'), [
+                'products' => OrderProductResource::collection($this->resource->products)
+            ])
         ];
     }
 }
