@@ -21,7 +21,6 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerCommands();
         $this->registerGateways();
         $this->registerPayment();
         $this->commands($this->commands);
