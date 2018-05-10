@@ -24,14 +24,6 @@ class PaymentServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerGateways();
         $this->registerPayment();
-        $this->registerCommands();
-    }
-
-    /**
-     * Register commands
-     */
-    protected function registerCommands()
-    {
         $this->commands($this->commands);
     }
 

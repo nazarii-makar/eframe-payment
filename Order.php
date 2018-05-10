@@ -79,6 +79,13 @@ class Order extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $hidden = [
+        'rec_token',
+    ];
+
+    /**
      * Order exposed observable events.
      *
      * These are extra user-defined events observers may subscribe to.

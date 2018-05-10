@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use EFrame\Payment\Contracts\Couponable;
 use EFrame\Payment\Contracts\Productable;
 use EFrame\Payment\Exceptions\LogicException;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use EFrame\Payment\Exceptions\InvalidArgumentException;
 
 class ShoppingCart
@@ -115,13 +114,13 @@ class ShoppingCart
             'currency'      => $currency,
             'is_regular'    => false,
             'status'        => Order::STATUS_NOT_ACTIVE,
-            'delivery_type' => array_search(get_class($this->delivery), Relation::morphMap(), true),
+            'delivery_type' => relation(get_class($this->delivery)),
             'delivery_id'   => $this->delivery->getKey(),
         ]);
 
         if (!is_null($this->client)) {
             $order->fill([
-                'client_type' => array_search(get_class($this->client), Relation::morphMap(), true),
+                'client_type' => relation(get_class($this->client)),
                 'client_id'   => $this->client->getKey(),
             ]);
         }
@@ -208,7 +207,7 @@ class ShoppingCart
                 'price'         => $price,
                 'count'         => $count,
                 'resource_id'   => $productable->getKey(),
-                'resource_type' => array_search(get_class($productable), Relation::morphMap(), true),
+                'resource_type' => relation(get_class($productable)),
             ]);
 
             $order_products->push($order_product);
