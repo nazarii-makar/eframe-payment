@@ -226,7 +226,7 @@ class WayForPay extends Gateway
         $error    = [];
 
         foreach ($required as $item) {
-            if (empty($this->params[$item] ?? $this->options->get($item))) {
+            if (is_null($this->params[$item] ?? $this->options->get($item))) {
                 $error[] = $item;
             } else {
                 $this->params[$item] = $this->params[$item] ?? $this->options->get($item);

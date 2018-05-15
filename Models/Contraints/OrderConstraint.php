@@ -11,7 +11,7 @@ use EFrame\Payment\Http\Grids\OrderGrid;
  * Trait OrderConstraint
  * @package EFrame\Payment\Models\Constraints
  *
- * @method static Order|Builder grid(OrderGrid $grid, array $sortable = ['amount', 'created_at', 'updated_at', 'deleted_at'])
+ * @method static Order|Builder grid(OrderGrid $grid, array $sortable = ['amount', 'created_at', 'updated_at', 'deleted_at', 'purchased_at'])
  */
 trait OrderConstraint
 {
@@ -22,7 +22,7 @@ trait OrderConstraint
      * @return Builder
      */
     public function scopeGrid($query, OrderGrid $grid, array $sortable = [
-        'amount', 'created_at', 'updated_at', 'deleted_at'
+        'amount', 'created_at', 'updated_at', 'deleted_at', 'purchased_at',
     ]) {
         foreach (
             [

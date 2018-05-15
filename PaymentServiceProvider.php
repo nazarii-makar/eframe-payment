@@ -3,12 +3,21 @@
 namespace EFrame\Payment;
 
 use EFrame\Payment\Payment;
+use EFrame\Payment\Models\Order;
 use EFrame\Payment\Gateways\WayForPay;
 use Illuminate\Support\ServiceProvider;
+use EFrame\Payment\Observers\OrderObserver;
 use EFrame\Payment\Console\OrderTableCommand;
 
 class PaymentServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     */
+    protected $observers = [
+        Order::class => OrderObserver::class,
+    ];
+
     /**
      * @var array
      */
@@ -71,11 +80,29 @@ class PaymentServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register observers
+     *
+     * @return void
+     */
+    protected function registerObservers()
+    {
+        /**
+         * @var Model  $model
+         * @var string $observer
+         */
+        foreach ($this->observers as $model => $observer) {
+            $model::observe($observer);
+        }
+    }
+
+    /**
      * Bootstrap the application services
      */
     public function boot()
     {
         $config = realpath(__DIR__ . '/config/payment.php');
         $this->mergeConfigFrom($config, 'payment');
+
+        $this->registerObservers();
     }
 }

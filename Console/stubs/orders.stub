@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('is_regular')->index();
             $table->unsignedTinyInteger('status')->index();
             $table->string('rec_token')->nullable()->index();
+            $table->timestamp('purchased_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

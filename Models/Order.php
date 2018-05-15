@@ -2,6 +2,7 @@
 
 namespace EFrame\Payment\Models;
 
+use Carbon\Carbon;
 use EFrame\Uuid\HasUuid;
 use EFrame\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,7 +49,7 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'purchased_at'];
 
     /**
      * @var array
@@ -63,6 +64,7 @@ class Order extends Model
         'is_regular',
         'status',
         'rec_token',
+        'purchased_at',
     ];
 
     /**
@@ -101,6 +103,8 @@ class Order extends Model
         'excepted',
         'deactivating',
         'deactivated',
+        'purchasing',
+        'purchased',
     ];
 
     /**
@@ -179,5 +183,23 @@ class Order extends Model
         $this->save();
 
         $this->fireModelEvent('deactivated', false);
+    }
+
+    /**
+     * Purchase order
+     *
+     * @return void
+     */
+    public function purchase()
+    {
+        if (false === $this->fireModelEvent('purchasing')) {
+            return;
+        }
+
+        $this->purchased_at = Carbon::now();
+
+        $this->save();
+
+        $this->fireModelEvent('purchased', false);
     }
 }

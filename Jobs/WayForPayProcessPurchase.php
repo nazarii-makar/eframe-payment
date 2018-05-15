@@ -8,7 +8,6 @@ use EFrame\Payment\Models\Order;
 use Illuminate\Support\Collection;
 use Business\Comment\Models\Comment;
 use Business\Business\Models\Business;
-use EFrame\Payment\Events\OrderPurchased;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class WayForPayProcessPurchase extends Job
@@ -46,9 +45,7 @@ class WayForPayProcessPurchase extends Job
             ConflictHttpException::class
         );
 
-        $order->activate();
-
-        event(new OrderPurchased($order));
+        $order->purchase();
 
         return $this->response();
     }
