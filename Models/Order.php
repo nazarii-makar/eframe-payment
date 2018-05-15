@@ -132,6 +132,14 @@ class Order extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'order_id');
+    }
+
+    /**
      * Activate order
      *
      * @return void

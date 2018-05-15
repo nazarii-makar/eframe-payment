@@ -75,7 +75,7 @@ class WayForPayPurchaseRequest extends FormRequest
             'recToken'          => 'required|string',
             'transactionStatus' => 'required|string',
             'reason'            => 'required|string',
-            'reasonCode'        => 'required|integer',
+            'reasonCode'        => 'required|integer|in:1100',
             'fee'               => 'required|numeric',
             'paymentSystem'     => 'required|string',
         ];

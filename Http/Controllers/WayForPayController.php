@@ -3,10 +3,9 @@
 namespace EFrame\Payment\Http\Controllers;
 
 use Illuminate\Http\Request;
-use EFrame\Payment\Events\OrderPurchased;
-use EFrame\Payment\Jobs\WayForPayProcessPurchase;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use EFrame\Payment\Http\Requests\WayForPayPurchaseRequest;
+use EFrame\Payment\Commands\WayForPayProcessPurchaseCommand;
 
 class WayForPayController extends BaseController
 {
@@ -28,6 +27,6 @@ class WayForPayController extends BaseController
             app()
         )->validateResolved();
 
-        return $this->dispatchNow(new WayForPayProcessPurchase($purchase_request));
+        return WayForPayProcessPurchaseCommand::dispatchNow($purchase_request);
     }
 }

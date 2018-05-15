@@ -8,6 +8,7 @@ use EFrame\Payment\Gateways\WayForPay;
 use Illuminate\Support\ServiceProvider;
 use EFrame\Payment\Observers\OrderObserver;
 use EFrame\Payment\Console\OrderTableCommand;
+use EFrame\Payment\Console\TransactionTableCommand;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,7 @@ class PaymentServiceProvider extends ServiceProvider
      */
     protected $commands = [
         OrderTableCommand::class,
+        TransactionTableCommand::class,
     ];
 
     /**
