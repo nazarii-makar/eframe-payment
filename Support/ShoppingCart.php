@@ -109,20 +109,18 @@ class ShoppingCart
 
         $amount = $this->calculate($order_products);
 
-        $order = new Order;
-
-        $order->fill([
+        $order = new Order([
             'amount'        => $amount,
             'currency'      => $currency,
             'is_regular'    => false,
             'status'        => Order::STATUS_NOT_ACTIVE,
-            'delivery_type' => relation(get_class($this->delivery)),
+            'delivery_type' => $this->delivery->getMorphClass(),
             'delivery_id'   => $this->delivery->getKey(),
         ]);
 
         if (!is_null($this->client)) {
             $order->fill([
-                'client_type' => relation(get_class($this->client)),
+                'client_type' => $this->client->getMorphClass(),
                 'client_id'   => $this->client->getKey(),
             ]);
         }
@@ -202,14 +200,12 @@ class ShoppingCart
                 $price = currency($price, $productable->getPrice(), $currency);
             }
 
-            $order_product = new OrderProduct;
-
-            $order_product->fill([
+            $order_product = new OrderProduct([
                 'name'          => $productable->getName(),
                 'price'         => $price,
                 'count'         => $count,
                 'resource_id'   => $productable->getKey(),
-                'resource_type' => relation(get_class($productable)),
+                'resource_type' => $productable->getMorphClass(),
             ]);
 
             $order_products->push($order_product);
