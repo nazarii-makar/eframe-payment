@@ -20,7 +20,7 @@
         "sort-packages": true
     },
     "suggest": {
-        "eframe/support" : "Required to use currency exchange rates library & relation helper",
+        "eframe/support" : "Required to use currency exchange rates library",
         "eframe/http" : "Required to use http resources",
         "eframe/foundation": "Required to use Form Request",
         "eframe/sanitize": "Required to use Sanitize for Form Request",
