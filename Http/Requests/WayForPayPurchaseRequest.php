@@ -63,7 +63,7 @@ class WayForPayPurchaseRequest extends FormRequest
             ],
             'amount'            => 'required|numeric',
             'currency'          => 'required|string',
-            'authCode'          => 'required|integer',
+            'authCode'          => 'required|string',
             'email'             => 'required|email',
             'phone'             => 'required|regex:/^\+?[\d]{12}$/',
             'createdDate'       => 'required|date_format:U',
