@@ -3,6 +3,7 @@
 namespace EFrame\Payment\Jobs;
 
 use EFrame\Payment\Models\Order;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class PurchaseOrder extends Job
 {
