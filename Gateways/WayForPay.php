@@ -19,6 +19,7 @@ class WayForPay extends Gateway
     const DEFAULT_CHARSET  = 'utf8';
 
     const MODE_PURCHASE         = 'PURCHASE';
+    const MODE_VERIFY           = 'VERIFY';
     const MODE_SETTLE           = 'SETTLE';
     const MODE_CHARGE           = 'CHARGE';
     const MODE_REFUND           = 'REFUND';
@@ -96,6 +97,20 @@ class WayForPay extends Gateway
     public function purchase($fields)
     {
         $this->prepare(self::MODE_PURCHASE, $fields);
+
+        return $this->params;
+    }
+
+    /**
+     * MODE_VERIFY
+     *
+     * @param $fields
+     *
+     * @return mixed
+     */
+    public function verify($fields)
+    {
+        $this->prepare(self::MODE_VERIFY, $fields);
 
         return $this->params;
     }
@@ -326,6 +341,15 @@ class WayForPay extends Gateway
             case 'PURCHASE':
                 return $purchaseFieldsAlias;
                 break;
+            case self::MODE_VERIFY:
+                return [
+                    'merchantAccount',
+                    'merchantDomainName',
+                    'orderReference',
+                    'amount',
+                    'currency'
+                ];
+                break;
             case 'REFUND':
                 return [
                     'merchantAccount',
@@ -404,6 +428,15 @@ class WayForPay extends Gateway
                     'productName',
                     'productCount',
                     'productPrice',
+                ];
+            case self::MODE_VERIFY:
+                return [
+                    'merchantAccount',
+                    'merchantDomainName',
+                    'apiVersion',
+                    'orderReference',
+                    'amount',
+                    'currency',
                 ];
             case 'SETTLE':
                 return [

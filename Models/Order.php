@@ -105,6 +105,8 @@ class Order extends Model
         'deactivated',
         'purchasing',
         'purchased',
+        'verifying',
+        'verified',
     ];
 
     /**
@@ -209,5 +211,23 @@ class Order extends Model
         $this->save();
 
         $this->fireModelEvent('purchased', false);
+    }
+
+    /**
+     * Verify order
+     *
+     * @return void
+     */
+    public function verify()
+    {
+        if (false === $this->fireModelEvent('verifying')) {
+            return;
+        }
+
+        $this->purchased_at = Carbon::now();
+
+        $this->save();
+
+        $this->fireModelEvent('verified', false);
     }
 }
