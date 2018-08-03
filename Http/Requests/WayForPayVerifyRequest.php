@@ -61,7 +61,7 @@ class WayForPayVerifyRequest extends FormRequest
             ],
             'amount'            => 'required|numeric',
             'currency'          => 'required|string',
-            'authCode'          => 'required|string',
+            'authCode'          => 'string',
             'createdDate'       => 'required|date_format:U',
             'processingDate'    => 'required|date_format:U',
             'cardPan'           => 'required|string',

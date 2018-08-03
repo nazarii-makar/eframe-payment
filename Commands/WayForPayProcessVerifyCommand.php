@@ -67,21 +67,22 @@ class WayForPayProcessVerifyCommand
         );
 
         switch ($this->request->get('transactionStatus')) {
-            case 'Approved':
+            case 'WaitingAuthComplete':
                 $transaction_status = Transaction::STATUS_SUCCESS;
                 break;
             case 'Created':
             case 'InProcessing':
-            case 'WaitingAuthComplete':
             case 'Pending':
                 $transaction_status = Transaction::STATUS_PENDING;
                 break;
             case 'Expired':
-            case 'Refunded/Voided':
+            case 'Refunded':
             case 'Declined':
             case 'RefundInProcessing':
                 $transaction_status = Transaction::STATUS_FAILURE;
                 break;
+            case 'Voided':
+                return $this->response();
             default:
                 $transaction_status = Transaction::STATUS_ERROR;
         }
