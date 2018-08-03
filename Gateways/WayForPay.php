@@ -28,6 +28,7 @@ class WayForPay extends Gateway
     const MODE_CREATE_INVOICE   = 'CREATE_INVOICE';
     const MODE_P2_PHONE         = 'P2_PHONE';
     const MODE_TRANSACTION_LIST = 'TRANSACTION_LIST';
+    const MODE_GET_CLIENT       = 'GET_CLIENT';
 
     private $merchant_account;
     private $merchant_password;
@@ -181,6 +182,17 @@ class WayForPay extends Gateway
     public function transactionList($fields)
     {
         $this->prepare(self::MODE_TRANSACTION_LIST, $fields);
+
+        return $this->query();
+    }
+
+    /**
+     * @param $fields
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function getClient($fields)
+    {
+        $this->prepare(static::MODE_GET_CLIENT, $fields);
 
         return $this->query();
     }
@@ -403,6 +415,11 @@ class WayForPay extends Gateway
                     'dateEnd',
                 ];
                 break;
+            case self::MODE_GET_CLIENT:
+                return [
+                    'merchantAccount',
+                    'recToken',
+                ];
             default:
                 throw new InvalidArgumentException('Unknown transaction type: ' . $this->action);
         }
@@ -529,6 +546,11 @@ class WayForPay extends Gateway
                     'dateEnd',
                 ];
                 break;
+            case self::MODE_GET_CLIENT:
+                return [
+                    'merchantAccount',
+                    'recToken',
+                ];
             default:
                 throw new InvalidArgumentException('Unknown transaction type');
         }
